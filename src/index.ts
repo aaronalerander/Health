@@ -56,6 +56,4 @@ function getClaimsForMemberID(id: string, claims: Claim[]): Claim[] {
   return memberClaims;
 }
 
-function 
-
 export { deduplicateClaims, getClaimsForMemberID };
