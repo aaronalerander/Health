@@ -52,6 +52,25 @@ class ClaimProcessor {
     }
     return amount;
   }
+
+  amountsPerProvider(): { providerID: string; amount: number }[] {
+    let amountPerProviderMap = new Map<string, number>();
+    for (const claim of this.claims) {
+      let amount = amountPerProviderMap.get(claim.providerID);
+      if (amount === undefined) {
+        amountPerProviderMap.set(claim.providerID, claim.amount);
+      } else {
+        amountPerProviderMap.set(claim.providerID, amount + claim.amount);
+      }
+    }
+
+    let amountPerProviderArr = [];
+    for (let [key, value] of amountPerProviderMap.entries()) {
+      amountPerProviderArr.push({ providerID: key, amount: value });
+    }
+
+    return amountPerProviderArr;
+  }
 }
 
 function deduplicateClaims(claimsData: Claim[]): Claim[] {
