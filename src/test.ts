@@ -140,7 +140,7 @@ function testTotalAmountAcrossClaims() {
 }
 
 function testingAmountPerProvider() {
-  console.log("testing totalAmountAccrossClaims");
+  console.log("testing amountPerProvider");
   let claims: Claim[] = [
     {
       claimID: "1",
@@ -169,8 +169,42 @@ function testingAmountPerProvider() {
   ];
   console.log("claims", claims);
   let claimProcessor = new ClaimProcessor(claims);
-  let amountPerProviderMap = claimProcessor.amountsPerProvider();
-  console.log("amount per provider", amountPerProviderMap);
+  let amountPerProvider = claimProcessor.amountsPerProvider();
+  console.log("amount per provider", amountPerProvider);
+}
+
+function testingClaimsPerMember() {
+  console.log("testing claimsPerMember");
+  let claims: Claim[] = [
+    {
+      claimID: "1",
+      memberID: "A",
+      providerID: "P1",
+      serviceDate: "2024-01-01",
+      amount: 100,
+      receivedAt: new Date("2024-01-02T10:00:00Z"),
+    },
+    {
+      claimID: "1",
+      memberID: "A",
+      providerID: "P1",
+      serviceDate: "2024-01-01",
+      amount: 100, // duplicate
+      receivedAt: new Date("2024-01-03T09:00:00Z"),
+    },
+    {
+      claimID: "2",
+      memberID: "B",
+      providerID: "P2",
+      serviceDate: "2024-01-05",
+      amount: 300,
+      receivedAt: new Date("2024-01-06T12:00:00Z"),
+    },
+  ];
+  console.log("claims", claims);
+  let claimProcessor = new ClaimProcessor(claims);
+  let claimsPerMember = claimProcessor.claimsPerMember();
+  console.log("claimsPerMember", claimsPerMember);
 }
 
 function runTestSuite(): void {
@@ -179,6 +213,7 @@ function runTestSuite(): void {
   testNumberOfUniqueClaims();
   testTotalAmountAcrossClaims();
   testingAmountPerProvider();
+  testingClaimsPerMember();
 }
 
 runTestSuite();
