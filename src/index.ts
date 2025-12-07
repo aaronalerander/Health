@@ -27,6 +27,33 @@ let claims: Claim[] = [
   },
 ];
 
+class ClaimProcessor {
+  claims: Claim[];
+
+  constructor(claims: Claim[]) {
+    let dedeupedClaims = deduplicateClaims(claims);
+    this.claims = dedeupedClaims;
+  }
+
+  getClaimsForMemberID(id: string): Claim[] {
+    let claims = [...this.claims];
+    let memberClaims = claims.filter((claim) => claim.memberID === id);
+    return memberClaims;
+  }
+
+  numberOfUniqueClaims(): number {
+    return this.claims.length;
+  }
+
+  totalAmountAcrossClaims(): number {
+    let amount = 0;
+    for (let claim of this.claims) {
+      amount += claim.amount;
+    }
+    return amount;
+  }
+}
+
 function deduplicateClaims(claimsData: Claim[]): Claim[] {
   let claimSet = new Map<string, Claim>();
 
@@ -34,8 +61,8 @@ function deduplicateClaims(claimsData: Claim[]): Claim[] {
     let claimID = JSON.stringify({
       claimID: claim.claimID,
       memberID: claim.memberID,
+      providerID: claim.providerID,
       serviceDate: claim.serviceDate,
-      amount: claim.amount,
     });
     let currentClaim = claimSet.get(claimID);
 
@@ -51,29 +78,4 @@ function deduplicateClaims(claimsData: Claim[]): Claim[] {
   return Array.from(claimSet.values());
 }
 
-function getClaimsForMemberID(id: string, claims: Claim[]): Claim[] {
-  let dedupedClaims = deduplicateClaims(claims);
-  let memberClaims = dedupedClaims.filter((claim) => claim.memberID === id);
-  return memberClaims;
-}
-
-function numberOfUniqueClaims(claims: Claim[]): number {
-  let dedeupedClaims = deduplicateClaims(claims);
-  return dedeupedClaims.length;
-}
-
-function totalAmountAcrossClaims(claims: Claim[]): number {
-  let deduped = deduplicateClaims(claims);
-  let amount = 0;
-  for (let claim of deduped) {
-    amount += claim.amount;
-  }
-  return amount;
-}
-
-export {
-  deduplicateClaims,
-  getClaimsForMemberID,
-  numberOfUniqueClaims,
-  totalAmountAcrossClaims,
-};
+export { deduplicateClaims, ClaimProcessor };

@@ -1,9 +1,4 @@
-import {
-  deduplicateClaims,
-  getClaimsForMemberID,
-  numberOfUniqueClaims,
-  totalAmountAcrossClaims,
-} from ".";
+import { ClaimProcessor, deduplicateClaims } from ".";
 import { Claim } from "./types/claim";
 
 function testDeduplicateClaims(): void {
@@ -71,7 +66,8 @@ function testGetClaimsForMemberID(): void {
   ];
 
   console.log("claims", claims);
-  let claimsForMemberIDA = getClaimsForMemberID("A", claims);
+  let claimProcessor = new ClaimProcessor(claims);
+  let claimsForMemberIDA = claimProcessor.getClaimsForMemberID("A");
   console.log("claims for member A", claimsForMemberIDA);
 }
 function testNumberOfUniqueClaims() {
@@ -104,7 +100,8 @@ function testNumberOfUniqueClaims() {
 
   console.log("testing number of unique claims");
   console.log("claims", claims);
-  let uniqueClaims = numberOfUniqueClaims(claims);
+  let claimProcessor = new ClaimProcessor(claims);
+  let uniqueClaims = claimProcessor.numberOfUniqueClaims();
   console.log(uniqueClaims);
 }
 
@@ -137,7 +134,8 @@ function testTotalAmountAcrossClaims() {
     },
   ];
   console.log("claims", claims);
-  let totalAmount = totalAmountAcrossClaims(claims);
+  let claimProcessor = new ClaimProcessor(claims);
+  let totalAmount = claimProcessor.totalAmountAcrossClaims();
   console.log("total amount", totalAmount);
 }
 
