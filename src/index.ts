@@ -52,8 +52,28 @@ function deduplicateClaims(claimsData: Claim[]): Claim[] {
 }
 
 function getClaimsForMemberID(id: string, claims: Claim[]): Claim[] {
-  let memberClaims = claims.filter((claim) => claim.memberID === id);
+  let dedupedClaims = deduplicateClaims(claims);
+  let memberClaims = dedupedClaims.filter((claim) => claim.memberID === id);
   return memberClaims;
 }
 
-export { deduplicateClaims, getClaimsForMemberID };
+function numberOfUniqueClaims(claims: Claim[]): number {
+  let dedeupedClaims = deduplicateClaims(claims);
+  return dedeupedClaims.length;
+}
+
+function totalAmountAcrossClaims(claims: Claim[]): number {
+  let deduped = deduplicateClaims(claims);
+  let amount = 0;
+  for (let claim of deduped) {
+    amount += claim.amount;
+  }
+  return amount;
+}
+
+export {
+  deduplicateClaims,
+  getClaimsForMemberID,
+  numberOfUniqueClaims,
+  totalAmountAcrossClaims,
+};
